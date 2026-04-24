@@ -24,21 +24,23 @@
     <div class="container">
         <h1>Dashboard</h1>
         <p>Bienvenido <span th:text="${user.name}"></span> (<span th:text="${user.role}"></span>)</p>
+
+      
         
-        <div class="stats-grid">
-            <div class="stat-card todo">
-                <h3>Por Hacer</h3>
-                <p class="stat-number" th:text="${stats.get('TODO') != null ? stats.get('TODO') : 0}">0</p>
-            </div>
-            <div class="stat-card progress">
-                <h3>En Progreso</h3>
-                 <p class="stat-number" th:text="${stats.get('IN_PROGRESS') != null ? stats.get('IN_PROGRESS') : 0}">0</p>
-            </div>
-            <div class="stat-card done">
-                <h3>Completadas</h3>
-                <p class="stat-number" th:text="${stats.get('DONE') != null ? stats.get('DONE') : 0}">0</p>
-            </div>
-        </div>
+    <div class="stats-grid">
+    <div class="stat-card todo">
+        <h3>Por Hacer</h3>
+        <p class="stat-number" th:text="${todoCount}">0</p>
+    </div>
+    <div class="stat-card progress">
+        <h3>En Progreso</h3>
+        <p class="stat-number" th:text="${inProgressCount}">0</p>
+    </div>
+    <div class="stat-card done">
+        <h3>Completadas</h3>
+        <p class="stat-number" th:text="${doneCount}">0</p>
+    </div>
+</div>
         
         <div class="section">
             <h2>Mis Tareas Recientes</h2>

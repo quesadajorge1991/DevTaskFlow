@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DevTaskFlow - Detalle de Tarea</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="nav-brand">DevTaskFlow</a>
+            <div class="nav-menu">
+                <a href="/tasks" class="nav-link">Tareas</a>
+                <a sec:authorize="hasRole('ADMIN')" href="/users" class="nav-link">Usuarios</a>
+                <span class="nav-user">Hola, <span sec:authentication="name"></span></span>
+
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-link logout-btn">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="task-detail" th:object="${task}">
+            <div class="task-header">
+                <h1 th:text="*{title}"></h1>
+                <div class="task-meta">
+                    <span class="badge" th:classappend="*{status.name()}" th:text="*{status.displayName}"></span>
+                    <span class="badge" th:classappend="*{priority.name()}" th:text="*{priority.displayName}"></span>
+                </div>
+            </div>
+
+            <div class="task-info">
+                <p><strong>Descripción:</strong></p>
+                <p th:text="*{description != null ? description : 'Sin descripción'}"></p>
+            </div>
+
+            <div class="task-info">
+                <p><strong>Asignado a:</strong> <span
+                        th:text="*{assignee != null ? assignee.name : 'Sin asignar'}"></span></p>
+                <p><strong>Creado por:</strong> <span th:text="*{createdBy.name}"></span></p>
+                <p><strong>Fecha creación:</strong> <span
+                        th:text="${task.createdAt} != null ? ${#temporals.format(task.createdAt, 'dd/MM/yyyy HH:mm')} : 'No registrada'"></span>
+                </p>
+                <p><strong>Fecha vencimiento:</strong> <span
+                        th:text="${task.dueDate} != null ? ${#temporals.format(task.dueDate, 'dd/MM/yyyy')} : 'Sin fecha'"></span>
+                </p>
+            </div>
+
+            <div class="task-actions">
+                <form th:action="@{/tasks/status/{id}(id=*{id})}" method="post" class="inline-form">
+                    <select name="status" onchange="this.form.submit()" th:value="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.displayName}"
+                            th:selected="${s == task.status}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-sm">Cambiar Estado</button>
+                </form>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/tasks/edit/{id}(id=*{id})}"
+                    class="btn btn-sm">Editar</a>
+            </div>
+
+            <div class="comments-section">
+                <h3>Comentarios</h3>
+
+                <div class="add-comment">
+                    <form th:action="@{/comments/add/{id}(id=*{id})}" method="post">
+                        <textarea name="content" placeholder="Escribe un comentario..." rows="3" required></textarea>
+                        <button type="submit" class="btn btn-primary">Agregar Comentario</button>
+                    </form>
+                </div>
+
+                <div class="comments-list">
+                    <div th:each="comment : ${task.comments}" class="comment">
+                        <div class="comment-header">
+                            <strong th:text="${comment.author.name}"></strong>
+                            <span class="comment-date"
+                                th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                        </div>
+                        <p class="comment-body" th:text="${comment.content}"></p>
+                    </div>
+                    <p th:if="${task.comments.empty}" class="text-center">No hay comentarios aún</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

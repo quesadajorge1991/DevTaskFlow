@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DevTaskFlow - Nuevo Usuario</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="nav-brand">DevTaskFlow</a>
+            <div class="nav-menu">
+                <a href="/tasks" class="nav-link">Tareas</a>
+                <a href="/users" class="nav-link">Usuarios</a>
+                <span class="nav-user">Hola, <span sec:authentication="name"></span></span>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-link logout-btn">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="form-container">
+            <h1>Crear Nuevo Usuario</h1>
+            
+            <form th:action="@{/users/new}" th:object="${user}" method="post">
+                <div class="form-group">
+                    <label for="name">Nombre Completo:</label>
+                    <input type="text" id="name" th:field="*{name}" required>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" th:field="*{password}" required>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Rol:</label>
+                    <select id="role" th:field="*{role}">
+                        <option value="DEVELOPER">Desarrollador</option>
+                        <option value="ADMIN">Administrador</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    <a href="/users" class="btn">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

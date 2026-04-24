@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>DevTaskFlow - Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="nav-brand">DevTaskFlow</a>
+            <div class="nav-menu">
+                <a href="/tasks" class="nav-link">Tareas</a>
+                <a sec:authorize="hasRole('ADMIN')" href="/users" class="nav-link">Usuarios</a>
+                <span class="nav-user">Hola, <span sec:authentication="name"></span></span>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-link logout-btn">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Bienvenido <span th:text="${user.name}"></span> (<span th:text="${user.role}"></span>)</p>
+
+      
+        
+    <div class="stats-grid">
+    <div class="stat-card todo">
+        <h3>Por Hacer</h3>
+        <p class="stat-number" th:text="${todoCount}">0</p>
+    </div>
+    <div class="stat-card progress">
+        <h3>En Progreso</h3>
+        <p class="stat-number" th:text="${inProgressCount}">0</p>
+    </div>
+    <div class="stat-card done">
+        <h3>Completadas</h3>
+        <p class="stat-number" th:text="${doneCount}">0</p>
+    </div>
+</div>
+        
+        <div class="section">
+            <h2>Mis Tareas Recientes</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Fecha Vencimiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="task : ${tasks}" th:if="${task.assignee.email == user.email}" th:object="${task}">
+                        <td th:text="*{title}"></td>
+                        <td><span class="badge" th:classappend="${task.status.name()}" th:text="${task.status.displayName}"></span></td>
+<td><span class="badge" th:classappend="${task.priority.name()}" th:text="${task.priority.displayName}"></span></td>
+                         <td th:text="${task.dueDate} != null ? ${#temporals.format(task.dueDate, 'dd/MM/yyyy')} : '-'"></td>
+                        <td><a th:href="@{/tasks/{id}(id=*{id})}" class="btn btn-sm">Ver</a></td>
+                    </tr>
+                    <tr th:if="${tienetarea==true}">
+                        <td colspan="5" class="text-center">No tienes tareas asignadas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
