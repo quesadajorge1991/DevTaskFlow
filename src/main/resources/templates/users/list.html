@@ -7,19 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/dashboard" class="nav-brand">DevTaskFlow</a>
-            <div class="nav-menu">
-                <a href="/tasks" class="nav-link">Tareas</a>
-                <a href="/users" class="nav-link active">Usuarios</a>
-                <span class="nav-user">Hola, <span sec:authentication="name"></span></span>
-                    <form th:action="@{/logout}" method="post" style="display: inline;">
-                    <button type="submit" class="nav-link logout-btn">Cerrar Sesión</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+  <div th:replace="~{fragments/layout/navbar :: navbar}"></div>
     
     <div class="container">
         <div class="header-actions">
