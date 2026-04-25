@@ -68,21 +68,21 @@ Esta aplicación fue desarrollada como proyecto de portafolio para demostrar hab
 
 DevTaskFlow/
 ├── src/main/java/com/DevTaskFlow/
-│ ├── config/ # Configuración de Spring Security
-│ ├── controller/ # Controladores MVC
-│ ├── model/ # Entidades JPA
-│ ├── repository/ # Repositorios JPA
-│ ├── service/ # Lógica de negocio
-│ └── dto/ # Objetos de transferencia de datos
+│   ├── config/                 # Configuración de Spring Security
+│   ├── controller/             # Controladores MVC
+│   ├── model/                  # Entidades JPA
+│   ├── repository/             # Repositorios JPA
+│   ├── service/                # Lógica de negocio
+│   └── dto/                    # Objetos de transferencia de datos
 ├── src/main/resources/
-│ ├── static/css/ # Estilos CSS
-│ ├── templates/ # Plantillas Thymeleaf
-│ │ ├── tasks/ # Vistas de tareas
-│ │ ├── users/ # Vistas de usuarios
-│ │ ├── dashboard.html
-│ │ ├── login.html
-│ │ └── register.html
-│ └── application.properties
+│   ├── static/css/             # Estilos CSS
+│   ├── templates/              # Plantillas Thymeleaf
+│   │   ├── tasks/              # Vistas de tareas
+│   │   ├── users/              # Vistas de usuarios
+│   │   ├── dashboard.html
+│   │   ├── login.html
+│   │   └── register.html
+│   └── application.properties
 └── pom.xml
 
 ---
