@@ -66,6 +66,7 @@ Esta aplicación fue desarrollada como proyecto de portafolio para demostrar hab
 
 ## 🏗️ Estructura del Proyecto
 
+```md
 DevTaskFlow/
 ├── src/main/java/com/DevTaskFlow/
 │   ├── config/                 # Configuración de Spring Security
@@ -84,6 +85,7 @@ DevTaskFlow/
 │   │   └── register.html
 │   └── application.properties
 └── pom.xml
+```
 
 ---
 
