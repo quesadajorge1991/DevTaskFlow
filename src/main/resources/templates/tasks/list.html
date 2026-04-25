@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DevTaskFlow - Tareas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/dashboard" class="nav-brand">DevTaskFlow</a>
+            <div class="nav-menu">
+                <a href="/tasks" class="nav-link active">Tareas</a>
+                <a sec:authorize="hasRole('ADMIN')" href="/users" class="nav-link">Usuarios</a>
+                <span class="nav-user">Hola, <span sec:authentication="name"></span></span>
+                   <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="nav-link logout-btn">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-actions">
+            <h1>Gestión de Tareas</h1>
+            <a sec:authorize="hasRole('ADMIN')" href="/tasks/new" class="btn btn-primary">+ Nueva Tarea</a>
+        </div>
+
+        <div th:if="${param.success}" class="alert alert-success" th:text="${param.success}"></div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Asignado a</th>
+                    <th>Estado</th>
+                    <th>Prioridad</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${tasks}" th:object="${task}">
+                    <td th:text="*{id}"></td>
+                    <td><a th:href="@{/tasks/{id}(id=*{id})}" th:text="*{title}"></a></td>
+                    <td th:text="*{assignee != null ? assignee.name : 'Sin asignar'}"></td>
+                    <td>
+                        <form th:action="@{/tasks/status/{id}(id=*{id})}" method="post" class="inline-form">
+                            <select name="status" onchange="this.form.submit()" th:value="*{status}">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.displayName}"
+                                    th:selected="${s == task.status}"></option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <span class="badge" th:classappend="${task.priority.name()}"
+                            th:text="${task.priority.displayName}"></span>
+                    </td>
+                    <td th:text="${task.dueDate} != null ? ${#temporals.format(task.dueDate, 'dd/MM/yyyy')} : '-'"></td>
+                    <td>
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/tasks/edit/{id}(id=*{id})}"
+                            class="btn btn-sm">Editar</a>
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/tasks/delete/{id}(id=*{id})}"
+                            class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar esta tarea?')">Eliminar</a>
+                    </td>
+                </tr>
+                <tr th:if="${tasks.empty}">
+                    <td colspan="7" class="text-center">No hay tareas registradas</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function confirmDelete(id) {
+            if (confirm('¿Eliminar esta tarea?')) {
+                window.location.href = '/tasks/delete/' + id;
+            }
+        }
+    </script>
+</body>
+
+</html>
